@@ -1,0 +1,764 @@
+import csv
+from io import StringIO
+
+# INI TUGAS DARI KANG PUDIN
+# DISURUH MASUKAN DATA OPENPROVIDER DAN IRSFANEW
+# KEMUDIAN KOMBINASIKAN DAN SIMPAN KE DALAM FILE BARU
+# Data pertama (openprovider)
+data1 = """
+abogado,30,45.9
+accountant,47.5,54
+ad,260.25,281.07
+adult,200.45,216.486
+ae,103.625,111.915
+aero,149.675,161.649
+af,208.75,225.45
+africa,12.475,13.473
+ag,187.5,202.5
+ai,136.25,167.4
+airforce,58.575,63.261
+al,98.75,101.25
+alsace,81.3125,87.8175
+am,93.75,101.25
+amsterdam,67.825,73.251
+ao,337.1125,400.491
+app,33.725,36.423
+aq,78.2125,66.987
+ar,156.25,168.75
+art,43.75,47.25
+as,281.25,182.25
+at,13.75,26.217
+attorney,71.25,76.95
+au,24.25,26.19
+audio,250.45,270.486
+auto,5000.45,5400.486
+aw,295.3125,327.672
+ax,134.85,83.0115
+az,620.2875,669.9105
+ba,268.35,289.818
+bank,1959.875,2116.665
+bar,125.45,135.486
+barcelona,29.6625,37.8675
+basketball,100.45,108.486
+bayern,63.7875,64.5165
+bb,505.675,546.129
+be,10.1125,23.274
+beer,56.25,60.75
+berlin,91.7,99.036
+best,32.5,40.986
+bf,288.575,466.0335
+bg,122.7125,132.5295
+bh,200.925,247.5765
+bi,199.575,215.541
+bible,97.95,105.786
+bid,41.25,44.55
+bj,107.875,116.505
+blackfriday,250.45,270.486
+bm,296.6625,211.167
+bo,622.5,672.3
+boo,18.725,20.223
+boston,26.25,28.35
+brussels,54.3375,58.6845
+bs,750,540
+bt,202.275,218.457
+build,93.75,108
+buzz,62.925,67.986
+bw,957.4125,1034.0055
+by,112.5,121.5
+bz,52.5,56.7
+bzh,94.8,102.384
+ca,14.325,25.1505
+cam,40,43.2
+capetown,23,24.84
+car,5000.45,5400.486
+career,185.45,200.286
+careers,75,81
+cars,5000.45,5400.486
+casa,9,13.77
+case,2750,3510
+cat,21.5625,43.6725
+catering,56.25,60.75
+cc,11.2375,40.4865
+cd,150,128.25
+ceo,124.975,134.973
+cf,57.9875,62.6265
+cg,942.575,1017.981
+ch,10.0375,34.101
+christmas,75.45,81.486
+ci,177.5,54
+cl,16.5,25.245
+cleaning,81.25,87.75
+click,22.5,24.3
+cloud,19.9875,40.4865
+cm,213.0625,230.1075
+cn,40,43.2
+cologne,33.7125,36.4095
+com,14.975,22.923
+compare,50.45,60.75
+condos,65,70.2
+contact,33.75,25.65
+cooking,56.25,60.75
+coop,225,179.55
+corsica,67.425,72.819
+country,2750,3510
+courses,62.95,67.986
+cr,187.5,202.5
+creditunion,250.45,270.486
+cricket,47.5,54
+cu,1086.25,1173.15
+cv,377.575,407.781
+cw,225.8625,283.986
+cx,47.5,56.7
+cy,267,182.0475
+cymru,30.8125,33.2775
+cz,10.7625,11.6235
+dad,15,22.95
+date,41.25,44.55
+day,18.725,20.223
+de,6.275,6.777
+dealer,3000,5400.486
+dental,75,81
+dentist,75,81
+desi,30.45,32.886
+dev,29.975,32.373
+diamonds,57,87.75
+diet,250.45,270.486
+diy,56.25,60.75
+dj,134.85,145.638
+dk,10.4875,11.3265
+dm,602.5,650.7
+do,150,162
+download,41.25,44.55
+durban,23,24.84
+dz,682.325,436.9005
+earth,37.95,40.986
+ec,148.75,168.75
+eco,141.875,153.225
+ee,94.3875,101.9385
+eg,1213.6125,946.62
+es,6.0625,14.553
+esq,30,45.9
+et,728.175,431.082
+eu,9.4125,17.442
+eus,76.15,98.685
+exposed,37.5,40.5
+faith,41.25,44.55
+fans,42.5,45.9
+fashion,50.45,54.486
+feedback,50.45,54.486
+fi,13.475,33.48
+film,150.45,162.486
+fishing,56.25,60.75
+flights,65,70.2
+flowers,250.45,270.486
+fm,162.5,175.5
+fo,238.55,103.437
+foo,15,22.95
+food,56.25,60.75
+forum,62.5,87.75
+fr,8.025,10.125
+frl,67.825,73.251
+fun,34.9875,53.9865
+futbol,35,37.8
+ga,35.0625,43.686
+gal,102.8875,105.3
+gallery,40,43.2
+game,750.45,810.486
+garden,56.25,60.75
+gay,47.5,67.986
+gd,79,85.32
+gdn,23.75,25.65
+ge,161.8125,174.7575
+gent,57.975,66.9735
+gf,412.625,291.2625
+gg,335.7625,240.3
+gi,196.875,206.8065
+gift,33.775,36.477
+gl,101.2,109.296
+glass,72.5,78.3
+gm,70.125,61.1685
+gmbh,52.5,56.7
+gp,213.0625,209.709
+gq,101.1375,109.2285
+gr,29.6625,32.0355
+graphics,31.2375,33.7365
+gratis,32.4875,35.0865
+gripe,48.75,52.65
+gs,61.1875,66.0825
+gt,161.8125,174.7575
+gu,349.25,650.9835
+guitars,250.45,270.486
+gw,80.9125,218.457
+gy,113.75,122.85
+hamburg,91.7,99.036
+health,125.45,135.486
+healthcare,97.5,105.3
+help,56.25,60.75
+hiphop,43.75,47.25
+hiv,447.95,483.786
+hk,67.3625,72.7515
+hm,136.25,118.8
+hn,187.5,202.5
+holdings,75,81
+horse,56.25,60.75
+hospital,72.5,78.3
+host,187.3875,202.3785
+hosting,750.45,810.486
+how,50.45,54.486
+hr,202.275,218.457
+ht,225.625,243.675
+hu,26.975,34.9515
+id,211.25,228.15
+ie,67.4125,72.8055
+im,74.6125,80.5815
+in,6.7875,16.2675
+inc,5000.45,3240
+ing,15,22.95
+insurance,1959.875,2116.665
+iq,515,880.2
+ir,90,97.2
+is,107.875,109.2285
+ist,30.45,32.886
+istanbul,37.95,40.986
+it,6.725,23.2875
+je,256.2125,276.7095
+jo,1941.7875,873.801
+jobs,248.75,268.65
+joburg,23,24.84
+jp,93.125,201.15
+juegos,750.45,810.486
+ke,136.25,201.15
+kg,200,216
+ki,1844.2125,1991.7495
+kids,31.25,44.55
+kiwi,36.8625,39.8115
+km,237.325,466.0335
+kn,404.5375,669.9105
+koeln,33.7125,36.4095
+kr,75,97.2
+krd,125.45,135.486
+ky,107.55,116.154
+kyoto,93.7375,101.2365
+kz,253.5125,273.7935
+la,65.625,75.6
+law,187.95,202.986
+lawyer,71.25,76.95
+lc,46.25,49.95
+li,30.9,33.372
+lifestyle,56.25,60.75
+link,22.5,24.3
+living,56.25,60.75
+lk,75.175,81.189
+loan,41.25,44.55
+london,65.3625,70.5915
+lotto,1856.25,3098.25
+love,50.45,54.486
+ls,411.9625,224.208
+lt,10.775,34.938
+ltda,70.45,76.086
+lu,40.3875,43.6185
+luxe,18,35.1
+luxury,62.95,51.3
+lv,11.4625,19.521
+ly,495,534.6
+ma,242.725,262.143
+madrid,67.825,73.251
+market,59.375,64.125
+mc,188.7875,203.8905
+md,295.3125,318.9375
+melbourne,81.2,87.696
+meme,15,22.95
+memorial,89.2,89.586
+men,41.25,44.55
+menu,62.95,67.986
+mg,269.0125,290.5335
+miami,23.75,31.05
+mk,63.75,68.85
+ml,31.6875,34.2225
+mn,87.5,94.5
+mo,404.5375,436.9005
+moe,30.45,32.886
+moscow,20.225,21.843
+mov,15,22.95
+mp,91.25,98.55
+mq,241.375,291.2625
+mr,205,302.4
+ms,77.2,83.376
+mt,144.2875,174.7575
+mu,187.5,202.5
+museum,134.575,145.341
+music,56.25,85.05
+mw,162.5,199.8
+mx,61.225,79.623
+my,150,162
+na,11057.3875,9288.54
+nagoya,25.4625,27.4995
+name,25,27
+navy,52.5,56.7
+nc,431.5125,466.0335
+ne,836.05,902.934
+net,19.4125,26.9865
+new,1000.45,1080.486
+nexus,15,22.95
+nf,300,324
+ng,188.7875,203.8905
+ngo,37.5,40.5
+ni,1213.6125,1310.7015
+nl,16.025,17.307
+nlm,2.0125,4.3605
+no,31.0875,33.5745
+nowruz,50.45,54.486
+nr,2022.6875,2184.5025
+nrw,94.375,101.925
+nu,24.7125,42.93
+nyc,50.45,54.486
+nz,68.5125,73.9935
+observer,28.75,31.05
+okinawa,17.225,18.603
+om,822.5625,888.3675
+one,37.5,24.3
+ong,37.5,40.5
+online,32.4875,67.4865
+ooo,50.425,54.459
+osaka,62.95,67.986
+pa,425,459
+page,27.475,29.673
+paris,78.6125,84.9015
+party,41.25,44.55
+pe,131.25,162
+pf,370.825,400.491
+ph,281.25,303.75
+phd,30,45.9
+photo,56.7,61.236
+physio,150.45,162.486
+pk,110,118.8
+pl,14.8375,40.9455
+place,37.5,40.5
+pm,8.025,10.125
+pn,235.975,254.853
+porn,200.45,216.486
+pr,2772.5,2994.3
+press,141.3875,152.6985
+prof,30,45.9
+property,157.5,270.486
+protection,5000.45,5400.486
+ps,125,135
+pt,14.825,59.2785
+pub,52.5,56.7
+pw,37.5,40.5
+qa,61.25,66.15
+quebec,62.95,67.986
+racing,41.25,44.55
+radio,539.875,583.065
+re,8.025,10.125
+realestate,117.5,126.9
+realty,385,745.686
+reise,115,124.2
+reisen,35.45,38.286
+reit,2500.45,2700.486
+ren,46.125,49.815
+rest,62.95,67.986
+review,41.25,44.55
+rio,24.0125,25.9335
+ro,56.6375,69.903
+rodeo,25,27
+rs,202.275,218.457
+rsvp,18.725,20.223
+ru,3,6.9525
+rugby,100.45,108.486
+ruhr,54.3375,58.6845
+rw,889.9875,891.2835
+ryukyu,17.225,18.603
+sa,53.9375,58.2525
+saarland,40.8625,44.1315
+sarl,48.75,52.65
+sb,100.3,108.324
+sc,200,216
+science,41.25,44.55
+scot,59.7375,64.5165
+sd,1281.0375,1383.5205
+se,24.7125,42.93
+security,5000.45,5400.486
+select,41.25,60.75
+sex,200.45,216.486
+sexy,3250,3510
+sg,100,108
+shiksha,33.325,32.616
+shop,32.4875,67.4865
+si,14.8375,26.217
+site,34.9875,63.4365
+sk,64.05,69.174
+sl,187.5,202.5
+sm,200,216
+sn,153.725,166.023
+so,168.75,182.25
+soy,45.45,49.086
+spa,50.45,54.486
+space,28.7375,48.5865
+sport,750.45,810.486
+spreadbetting,50000.45,54000.486
+sr,88.75,95.85
+srl,65.45,70.686
+st,112.5,95.85
+storage,1250.45,1350.486
+store,51.2375,107.9865
+stream,41.25,44.55
+study,62.5,67.5
+su,57.5,62.1
+sucks,497.95,537.786
+supplies,29.9875,32.3865
+supply,31.2375,33.7365
+surf,56.25,60.75
+surgery,63.75,68.85
+sv,373.75,403.65
+swiss,258.925,279.639
+sx,62.5,67.5
+sydney,81.225,87.723
+taipei,35.45,38.286
+tatar,11.1875,12.0825
+tattoo,53.75,81.486
+tc,229.2375,247.5765
+td,606.8125,655.3575
+tech,62.75,121.473
+tel,33.75,44.55
+tennis,77.5,83.7
+tf,8.025,10.125
+tg,257.5625,480.5865
+theatre,1250.45,1350.486
+tickets,875.45,945.486
+tirol,72.8125,87.3855
+tj,153.725,256.311
+tk,16.1875,17.4825
+tl,103.275,111.537
+tm,650,702
+tn,175.3,189.324
+to,158.75,171.45
+tokyo,25.4625,27.4995
+top,5.425,16.0245
+trade,41.25,44.55
+trading,37.5,40.5
+tt,982.5,1061.1
+tube,50.45,54.486
+tv,32.4875,67.4865
+tw,79.9875,86.3865
+tz,124.0625,133.9875
+ua,235,253.8
+ug,137.5,148.5
+uk,8.1125,26.2575
+uno,37.95,35.1
+uy,225,243
+uz,76.8625,131.0715
+vana,2781.25,3003.75
+vc,63.75,68.85
+vegas,100.325,108.351
+versicherung,267.4,288.792
+vet,55,59.4
+vg,135,145.8
+vi,641.8625,655.3575
+viajes,87.95,94.986
+vlaanderen,54.3375,58.6845
+vn,181.25,195.75
+vodka,50.45,60.75
+voting,1837.6875,1984.7025
+vu,186.25,226.8
+vuelos,25000.45,27000.486
+wales,30.8125,33.2775
+wang,22.5,24.3
+webcam,41.25,44.55
+website,28.7375,48.5865
+wedding,56.25,60.75
+wf,8.025,10.125
+whoswho,12500.45,13500.486
+wien,71.8,77.544
+win,17.4875,18.8865
+work,25,27
+ws,47.5,67.5
+xxx,200.45,136.35
+yoga,56.25,60.75
+yokohama,25.4625,27.4995
+yt,8.025,10.125
+zip,15,22.95
+zm,384.3125,415.0575
+zuerich,103.3625,111.6315
+"""
+
+# Data kedua (irsfanew)
+data2 = """TLD	Register	Renewal
+ART	25,00	27,00
+AUDIO	125,00	135,00
+AUTO	2500,00	2700,00
+AUTOS	13,75	14,85
+BABY	62,50	67,50
+BAR	62,50	67,50
+BEAUTY	13,75	14,85
+BEST	18,75	20,25
+BLOG	25,00	27,00
+BOATS	13,75	14,85
+BOND	15,00	16,20
+BUILD	31,25	33,75
+CAM	8,75	18,90
+CAR	2500,00	2700,00
+CARS	2500,00	2700,00
+CASE	2500,00	2700,00
+CEO	96,25	103,95
+CFD	15,00	16,20
+CHRISTMAS	37,50	40,50
+COLLEGE	62,50	67,50
+CYOU	15,00	16,20
+DEALER	2500,00	2700,00
+DESI	15,00	16,20
+DIET	125,00	135,00
+FANS	10,00	10,80
+FEEDBACK	0,78	0,84
+FLOWERS	125,00	135,00
+FORUM	37,50	40,50
+FRL	31,25	33,75
+FUN	31,25	33,75
+GAME	375,00	405,00
+GUITARS	125,00	135,00
+HAIR	13,75	14,85
+HELP	27,50	29,70
+HOMES	13,75	14,85
+HOST	93,75	101,25
+HOSTING	375,00	405,00
+ICU	15,00	16,20
+INC	2500,00	2700,00
+LAT	27,50	29,70
+LOL	27,50	29,70
+LONDON	25,00	27,00
+LUXURY	31,25	33,75
+MAKEUP	13,75	14,85
+MOM	31,25	33,75
+MONSTER	13,75	14,85
+MOTORCYCLES	13,75	14,85
+MUSIC	46,25	49,95
+ONLINE	31,25	33,75
+OOO	24,99	26,99
+PICS	27,50	29,70
+PRESS	73,75	79,65
+PROTECTION	2500,00	2700,00
+QPON	11,10	11,99
+QUEST	13,75	14,85
+REIT	1250,00	1350,00
+RENT	62,50	67,50
+REST	31,25	33,75
+SAARLAND	22,50	24,30
+SBS	15,00	16,20
+SECURITY	2500,00	2700,00
+SITE	31,25	33,75
+SKIN	13,75	14,85
+SPACE	25,00	27,00
+STORAGE	625,00	675,00
+STORE	50,00	54,00
+TECH	56,25	60,75
+THEATRE	625,00	675,00
+TICKETS	437,50	472,50
+UNO	18,75	20,25
+WEBSITE	25,00	27,00
+XYZ	13,75	14,85
+YACHTS	13,75	14,85
+info	3,75	25,65
+academy	11,88	44,55
+actor	15,00	41,85
+agency	5,00	28,35
+archi	15,63	97,20
+army	16,25	36,45
+associates	16,25	37,80
+kim	9,38	20,25
+band	18,75	29,70
+bet	9,38	24,30
+bike	11,25	36,45
+black	18,75	62,10
+blue	15,63	22,95
+boutique	5,00	33,75
+broker	12,50	32,40
+mobi	5,63	40,50
+care	18,75	40,50
+cash	9,38	33,75
+casino	5,00	159,30
+center	7,50	29,70
+chat	9,38	36,45
+cheap	7,50	33,75
+church	12,50	41,85
+city	5,00	24,30
+codes	7,50	62,10
+coffee	8,75	36,45
+computer	18,75	36,45
+consulting	16,88	48,60
+cool	8,13	36,45
+dance	15,00	25,65
+dating	18,75	60,75
+delivery	5,63	55,35
+digital	1,88	39,15
+direct	15,63	36,45
+directory	5,00	24,30
+email	3,75	28,35
+energy	11,88	109,35
+engineering	15,00	62,10
+enterprises	7,50	36,45
+estate	9,38	36,45
+pro	3,13	25,65
+bargains	13,75	31,05
+watches	62,50	337,50
+bio	6,25	70,88
+voto	25,00	72,90
+events	13,75	40,50
+exchange	11,25	36,45
+express	9,38	36,45
+farm	13,75	36,45
+finance	12,50	60,75
+financial	18,75	54,00
+fitness	6,25	37,80
+forsale	15,00	33,75
+global	40,00	86,40
+golf	5,00	60,75
+guru	3,75	39,15
+haus	12,50	31,05
+house	13,75	41,85
+institute	7,50	25,65
+international	9,38	29,70
+investments	9,38	121,50
+irish	6,25	20,25
+vin	7,50	55,35
+kitchen	9,38	60,75
+land	13,75	37,80
+lgbt	12,50	75,60
+life	1,88	35,10
+live	2,50	31,05
+loans	12,50	108,00
+ltd	6,25	28,35
+markets	6,25	16,20
+mba	12,50	36,45
+media	5,00	43,20
+money	13,75	36,45
+video	10,63	33,75
+movie	43,75	310,50
+network	5,63	32,40
+news	9,38	31,05
+organic	15,63	79,65
+partners	18,75	66,15
+parts	10,94	37,80
+pet	7,50	23,63
+photography	13,75	33,75
+photos	13,75	25,65
+claims	15,63	62,10
+pink	9,38	23,63
+pizza	12,50	60,75
+plus	9,38	43,20
+poker	9,38	62,10
+productions	9,38	37,80
+promo	12,50	22,95
+properties	13,75	36,45
+recipes	5,63	74,25
+red	9,38	21,60
+rentals	9,38	41,85
+report	9,38	22,95
+restaurant	13,75	59,40
+rocks	3,13	20,25
+run	3,75	24,30
+sale	6,25	36,45
+services	7,50	37,80
+show	11,25	40,50
+ski	25,00	62,10
+social	8,75	36,45
+software	15,63	36,45
+solutions	6,88	29,70
+studio	13,75	41,85
+style	18,44	36,45
+support	7,50	25,65
+systems	16,88	32,40
+tax	12,50	66,15
+taxi	6,88	60,75
+team	5,00	35,10
+today	2,50	27,00
+tools	11,25	33,75
+tips	11,25	28,35
+town	7,50	35,10
+toys	15,63	60,75
+training	9,38	37,80
+travel	18,75	135,00
+vote	25,00	86,40
+watch	3,13	40,50
+wine	6,25	55,35
+works	6,88	36,45
+world	1,88	39,15
+wtf	6,25	33,75
+zone	9,38	36,45
+technology	7,50	27,00
+credit	10,00	101,25
+coupons	2,50	51,30
+singles	8,13	31,05
+doctor	9,38	108,00
+repair	9,38	33,75
+forex	12,50	40,50
+furniture	25,00	108,00
+gold	6,25	101,25
+ninja	13,75	28,35
+lotto	125,00	1822,50
+shiksha	12,50	17,75"""
+
+kurs = 16297.45
+
+def to_rupiah(val):
+    return f"{val * kurs:.2f}"
+
+def sql_block_openprovider(idx, ext, reg, ren):
+    reg_idr = float(reg)
+    ren_idr = float(ren)
+    reg_rp = to_rupiah(reg_idr)
+    ren_rp = to_rupiah(ren_idr)
+    return f"""-- {ext}
+INSERT INTO `tbldomainpricing`
+(`id`, `extension`, `dnsmanagement`, `emailforwarding`, `idprotection`, `eppcode`, `autoreg`, `order`, `group`, `grace_period`, `grace_period_fee`, `redemption_grace_period`, `redemption_grace_period_fee`, `created_at`, `updated_at`)
+VALUES
+({idx}, '.{ext}', '1', '0', '1', '1', 'openprovider', '{idx}', 'none', '25', '0.00', '30', '{ren_rp}', '0000-00-00 00:00:00', '2022-10-05 08:39:55');
+
+INSERT INTO `tblpricing`
+(`id`, `type`, `currency`, `relid`, `msetupfee`, `qsetupfee`, `ssetupfee`, `asetupfee`, `bsetupfee`, `tsetupfee`, `monthly`, `quarterly`, `semiannually`, `annually`, `biennially`, `triennially`)
+VALUES
+(NULL, 'domainregister', '1', '{idx}', '{reg_rp}', '{to_rupiah(reg_idr*2)}', '{to_rupiah(reg_idr*3)}', '{to_rupiah(reg_idr*4)}', '{to_rupiah(reg_idr*5)}', '0.00', '{to_rupiah(reg_idr*6)}', '{to_rupiah(reg_idr*7)}', '{to_rupiah(reg_idr*8)}', '{to_rupiah(reg_idr*9)}', '{to_rupiah(reg_idr*10)}', '0.00'),
+(NULL, 'domaintransfer', '1', '{idx}', '{ren_rp}', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00'),
+(NULL, 'domainrenew', '1', '{idx}', '{ren_rp}', '{to_rupiah(ren_idr*2)}', '{to_rupiah(ren_idr*3)}', '{to_rupiah(ren_idr*4)}', '{to_rupiah(ren_idr*5)}', '0.00', '{to_rupiah(ren_idr*6)}', '{to_rupiah(ren_idr*7)}', '{to_rupiah(ren_idr*8)}', '{to_rupiah(ren_idr*9)}', '{to_rupiah(ren_idr*10)}', '0.00'),
+(NULL, 'domainregister', '3', '{idx}', '{reg}', '{float(reg)*2:.2f}', '{float(reg)*3:.2f}', '{float(reg)*4:.2f}', '{float(reg)*5:.2f}', '0.00', '{float(reg)*6:.2f}', '{float(reg)*7:.2f}', '{float(reg)*8:.2f}', '{float(reg)*9:.2f}', '{float(reg)*10:.2f}', '0.00'),
+(NULL, 'domaintransfer', '3', '{idx}', '{ren}', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00'),
+(NULL, 'domainrenew', '3', '{idx}', '{ren}', '{float(ren)*2:.2f}', '{float(ren)*3:.2f}', '{float(ren)*4:.2f}', '{float(ren)*5:.2f}', '0.00', '{float(ren)*6:.2f}', '{float(ren)*7:.2f}', '{float(ren)*8:.2f}', '{float(ren)*9:.2f}', '{float(ren)*10:.2f}', '0.00');
+"""
+
+def sql_block_irsfanew(idx, domain_data):
+    extension = domain_data['TLD'].lower()
+    register = domain_data['Register'].replace(',', '.')
+    renew = domain_data['Renewal'].replace(',', '.')
+    
+    register_idr = float(register) * kurs
+    renew_idr = float(renew) * kurs
+    
+    return f"""-- {extension.upper()}
+INSERT INTO `tbldomainpricing`
+(`id`, `extension`, `dnsmanagement`, `emailforwarding`, `idprotection`, `eppcode`, `autoreg`, `order`, `group`, `grace_period`, `grace_period_fee`, `redemption_grace_period`, `redemption_grace_period_fee`, `created_at`, `updated_at`)
+VALUES
+({idx}, '.{extension}', '1', '0', '1', '1', 'irsfanew', '{idx}', 'none', '25', '0.00', '30', '{renew_idr:.2f}', '0000-00-00 00:00:00', '2022-10-05 08:39:55');
+
+INSERT INTO `tblpricing`
+(`id`, `type`, `currency`, `relid`, `msetupfee`, `qsetupfee`, `ssetupfee`, `asetupfee`, `bsetupfee`, `tsetupfee`, `monthly`, `quarterly`, `semiannually`, `annually`, `biennially`, `triennially`)
+VALUES
+(NULL, 'domainregister', '1', '{idx}', '{register_idr:.2f}', '{register_idr*2:.2f}', '{register_idr*3:.2f}', '{register_idr*4:.2f}', '{register_idr*5:.2f}', '0.00', '{register_idr*6:.2f}', '{register_idr*7:.2f}', '{register_idr*8:.2f}', '{register_idr*9:.2f}', '{register_idr*10:.2f}', '0.00'),
+(NULL, 'domaintransfer', '1', '{idx}', '{renew_idr:.2f}', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00'),
+(NULL, 'domainrenew', '1', '{idx}', '{renew_idr:.2f}', '{renew_idr*2:.2f}', '{renew_idr*3:.2f}', '{renew_idr*4:.2f}', '{renew_idr*5:.2f}', '0.00', '{renew_idr*6:.2f}', '{renew_idr*7:.2f}', '{renew_idr*8:.2f}', '{renew_idr*9:.2f}', '{renew_idr*10:.2f}', '0.00'),
+(NULL, 'domainregister', '3', '{idx}', '{register}', '{float(register)*2:.2f}', '{float(register)*3:.2f}', '{float(register)*4:.2f}', '{float(register)*5:.2f}', '0.00', '{float(register)*6:.2f}', '{float(register)*7:.2f}', '{float(register)*8:.2f}', '{float(register)*9:.2f}', '{float(register)*10:.2f}', '0.00'),
+(NULL, 'domaintransfer', '3', '{idx}', '{renew}', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00', '0.00'),
+(NULL, 'domainrenew', '3', '{idx}', '{renew}', '{float(renew)*2:.2f}', '{float(renew)*3:.2f}', '{float(renew)*4:.2f}', '{float(renew)*5:.2f}', '0.00', '{float(renew)*6:.2f}', '{float(renew)*7:.2f}', '{float(renew)*8:.2f}', '{float(renew)*9:.2f}', '{float(renew)*10:.2f}', '0.00');
+"""
+
+# Generate SQL untuk semua domain
+with open("combined_domain_pricing.sql", "w", encoding="utf-8") as f:
+    # Proses data openprovider
+    for idx, line in enumerate(data1.strip().splitlines(), 1):
+        ext, reg, ren = line.split(",")
+        f.write(sql_block_openprovider(idx, ext, reg, ren))
+    
+    # Proses data irsfanew
+    csv_reader = csv.DictReader(StringIO(data2), delimiter='\t')
+    for idx, domain in enumerate(csv_reader, 475):  # Mulai dari ID 475
+        f.write(sql_block_irsfanew(idx, domain))
+
+print("File combined_domain_pricing.sql berhasil dibuat!")
