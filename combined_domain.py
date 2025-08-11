@@ -93,7 +93,7 @@ cloud,19.9875,40.4865
 cm,213.0625,230.1075
 cn,40,43.2
 cologne,33.7125,36.4095
-com,14.975,22.923
+com,11.99,20
 compare,50.45,60.75
 condos,65,70.2
 contact,33.75,25.65
@@ -208,7 +208,7 @@ how,50.45,54.486
 hr,202.275,218.457
 ht,225.625,243.675
 hu,26.975,34.9515
-id,211.25,228.15
+id,22,22
 ie,67.4125,72.8055
 im,74.6125,80.5815
 in,6.7875,16.2675
@@ -297,7 +297,7 @@ name,25,27
 navy,52.5,56.7
 nc,431.5125,466.0335
 ne,836.05,902.934
-net,19.4125,26.9865
+net,14,21
 new,1000.45,1080.486
 nexus,15,22.95
 nf,300,324
@@ -750,7 +750,7 @@ VALUES
 """
 
 # Generate SQL untuk semua domain
-with open("combined_domain_pricing.sql", "w", encoding="utf-8") as f:
+with open("sql/combined_domain_pricing.sql", "w", encoding="utf-8") as f:
     # Proses data openprovider
     for idx, line in enumerate(data1.strip().splitlines(), 1):
         ext, reg, ren = line.split(",")

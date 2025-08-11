@@ -33,23 +33,47 @@ def test_connection():
                 print(f"Port lokal tidak bisa diakses (error code: {result})")
             sock.close()
             
-            # Konfigurasi database dengan timeout yang lebih pendek
+            # DB : clientqwords_newlatest
+            # db_config = {
+            #     'host': '127.0.0.1',
+            #     'port': tunnel.local_bind_port,
+            #     'user': 'clientqwords_newlatest',
+            #     'password': 'DFK99gfSqchU8aL6hxua',
+            #     'database': 'clientqwords_newlatest',
+            #     'connect_timeout': 3,  # Timeout lebih pendek
+            #     'use_pure': True,  # Gunakan pure Python implementation
+            #     'auth_plugin': 'mysql_native_password'
+            # }
+
+            # DB : clientqwords_ID
             db_config = {
                 'host': '127.0.0.1',
                 'port': tunnel.local_bind_port,
-                'user': 'clientqwords_newlatest',
-                'password': 'DFK99gfSqchU8aL6hxua',
-                'database': 'clientqwords_newlatest',
+                'user': 'clientqwords_ID',
+                'password': '3LnkNdue2bUrHb7GKECw',
+                'database': 'clientqwords_ID',
                 'connect_timeout': 3,  # Timeout lebih pendek
                 'use_pure': True,  # Gunakan pure Python implementation
                 'auth_plugin': 'mysql_native_password'
             }
             
+            # DB : clientqwords_EN
+            # db_config = {
+            #     'host': '127.0.0.1',
+            #     'port': tunnel.local_bind_port,
+            #     'user': 'clientqwords_EN',
+            #     'password': 'w5LvD3S5RHUbcSLYj5Yz',
+            #     'database': 'clientqwords_EN',
+            #     'connect_timeout': 3,  # Timeout lebih pendek
+            #     'use_pure': True,  # Gunakan pure Python implementation
+            #     'auth_plugin': 'mysql_native_password'
+            # }
+
             print("Mencoba koneksi ke database...")
             print("Konfigurasi database:", {k: v for k, v in db_config.items() if k != 'password'})
             
             conn = mysql.connector.connect(**db_config)
-            print("Koneksi database berhasil!")
+            print("=======KONEKSI DATABASE BERHASIL!=======")
             
             cursor = conn.cursor()
             print("Mencoba eksekusi query...")

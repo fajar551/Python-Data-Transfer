@@ -502,7 +502,7 @@ VALUES
 (NULL, 'domainrenew', '3', '{idx}', '{ren}', '{float(ren)*2:.2f}', '{float(ren)*3:.2f}', '{float(ren)*4:.2f}', '{float(ren)*5:.2f}', '0.00', '{float(ren)*6:.2f}', '{float(ren)*7:.2f}', '{float(ren)*8:.2f}', '{float(ren)*9:.2f}', '{float(ren)*10:.2f}', '0.00');
 """
 
-with open("domain_pricing.sql", "w", encoding="utf-8") as f:
+with open("sql/domain_pricing.sql", "w", encoding="utf-8") as f:
     for idx, line in enumerate(data.strip().splitlines(), 1):
         ext, reg, ren = line.split(",")
         f.write(sql_block(idx, ext, reg, ren))

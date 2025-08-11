@@ -269,7 +269,7 @@ for domain in csv_reader:
     id_counter += 1
 
 # Tulis ke file
-with open('irsfanew.sql', 'w') as f:
+with open('sql/irsfanew.sql', 'w') as f:
     f.write(sql_output)
 
 print("File irsfanew.sql telah dibuat!")

@@ -4,7 +4,6 @@ from sshtunnel import SSHTunnelForwarder
 from datetime import datetime
 import uuid
 
-# Konfigurasi SSH
 ssh_config = {
     'ssh_host': 'garuda10.fastcloud.id',
     'ssh_port': 22,
@@ -19,17 +18,15 @@ def insert_clients():
     print("Membuat SSH tunnel...")
     
     try:
-        # Buat SSH tunnel
         with SSHTunnelForwarder(**ssh_config) as tunnel:
             print(f"SSH tunnel berhasil dibuat di port {tunnel.local_bind_port}")
             
-            # Konfigurasi database
             db_config = {
                 'host': '127.0.0.1',
                 'port': tunnel.local_bind_port,
-                'user': 'clientqwords_newlatest',
-                'password': 'DFK99gfSqchU8aL6hxua',
-                'database': 'clientqwords_newlatest',
+                'user': 'clientqwords_ID',
+                'password': '3LnkNdue2bUrHb7GKECw',
+                'database': 'clientqwords_ID',
                 'connect_timeout': 3,
                 'use_pure': True,
                 'auth_plugin': 'mysql_native_password'
@@ -38,9 +35,8 @@ def insert_clients():
             print("Mencoba koneksi ke database...")
             conn = mysql.connector.connect(**db_config)
             cursor = conn.cursor()
-            print("Koneksi database berhasil!")
+            print("=======KONEKSI DATABASE BERHASIL!=======")
 
-            # Query untuk mengambil data dari clients_contacts
             print("Mengambil data dari clients_contacts...")
             cursor.execute("""
                 SELECT handle, pandi_id, name, company_name, phone, email, 
@@ -51,7 +47,6 @@ def insert_clients():
             contacts = cursor.fetchall()
             print(f"Berhasil mengambil {len(contacts)} data contacts")
 
-            # Query untuk insert ke tblclients
             insert_query = """
                 INSERT INTO tblclients (
                     id, uuid, firstname, lastname, companyname, email, address1, address2,
@@ -75,13 +70,12 @@ def insert_clients():
             print("Memulai proses insert data...")
             success_count = 0
             error_count = 0
-            current_id = 6  # Mulai dari ID 6
+            current_id = 6
             
             for i, contact in enumerate(contacts, 1):
                 try:
-                    # Split name menjadi firstname dan lastname
-                    name = contact[2] or ''  # Ambil name, jika None gunakan string kosong
-                    if not name.strip():  # Jika name kosong atau hanya berisi spasi
+                    name = contact[2] or ''
+                    if not name.strip():
                         firstname = 'N/A'
                         lastname = 'N/A'
                     else:
@@ -89,10 +83,8 @@ def insert_clients():
                         firstname = name_parts[0] if name_parts else 'N/A'
                         lastname = name_parts[1] if len(name_parts) > 1 else 'N/A'
 
-                    # Generate UUID
                     new_uuid = str(uuid.uuid4())
 
-                    # Siapkan data untuk insert
                     values = (
                         current_id,                  # id (dimulai dari 6)
                         new_uuid,                    # uuid
@@ -154,12 +146,11 @@ def insert_clients():
                         None                         # backup_code
                     )
 
-                    # Execute insert
                     cursor.execute(insert_query, values)
                     success_count += 1
-                    current_id += 1  # Increment ID untuk data berikutnya
+                    current_id += 1
                     
-                    if i % 10 == 0:  # Print progress setiap 10 data
+                    if i % 10 == 0:
                         print(f"Progress: {i}/{len(contacts)} data berhasil diinsert")
 
                 except Exception as e:
@@ -167,7 +158,6 @@ def insert_clients():
                     print(f"Error pada data ke-{i}: {str(e)}")
                     continue
 
-            # Commit perubahan
             conn.commit()
             end_time = time.time()
             print("\nRingkasan:")
