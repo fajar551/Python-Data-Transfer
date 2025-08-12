@@ -42,7 +42,7 @@ SELECT COUNT(*) as total_pricing_backup FROM tblpricing_backup_{timestamp};
 SELECT COUNT(*) as total_productgroups_backup FROM tblproductgroups_backup_{timestamp};
 
 """
-    return backup_sql
+    return backup_sql, timestamp
 
 def escape_column_name(column_name):
     """Escape nama kolom dengan backticks untuk menghindari reserved keywords"""
@@ -87,7 +87,7 @@ def get_default_value(column_name, column_type, column_null, column_default):
     else:
         return ''
 
-def generate_duplicate_sql():
+def generate_duplicate_sql(timestamp):
     """Generate SQL untuk duplikasi lengkap: productgroups -> products -> pricing"""
     print("Mengambil data untuk generate SQL duplikasi lengkap...")
     
@@ -330,10 +330,8 @@ def generate_duplicate_sql():
                         # Update gid dengan gid baru dari productgroup yang diduplikasi
                         elif column_name == 'gid':
                             old_gid = value
-                            if old_gid in gid_mapping:
-                                new_prod_data.append(f"(SELECT id FROM tblproductgroups WHERE name LIKE '%Speed UP 50%' AND name = (SELECT CONCAT(name, ' Speed UP 50%') FROM tblproductgroups_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')} WHERE id = {old_gid}))")
-                            else:
-                                new_prod_data.append(value)
+                            # Gunakan query langsung untuk mendapatkan ID grup baru
+                            new_prod_data.append(f"(SELECT id FROM tblproductgroups WHERE name LIKE '%Speed UP 50%' ORDER BY id DESC LIMIT 1)")
                         # Generate ID baru (auto increment)
                         elif column_name == 'id':
                             new_prod_data.append(None)
@@ -399,10 +397,11 @@ def generate_duplicate_sql():
                         else:
                             value = None
                         
-                        # Update relid dengan product ID baru
+                        # Update relid dengan product ID baru yang diduplikasi
                         if column_name == 'relid':
                             old_relid = value
-                            new_price_data.append(f"(SELECT id FROM tblproducts WHERE name LIKE '%Speed UP 50%' AND name = (SELECT CONCAT(name, ' Speed UP 50%') FROM tblproducts_backup_{datetime.now().strftime('%Y%m%d_%H%M%S')} WHERE id = {old_relid}))")
+                            # Gunakan query langsung untuk mendapatkan ID produk baru
+                            new_price_data.append(f"(SELECT id FROM tblproducts WHERE name LIKE '%Speed UP 50%' ORDER BY id DESC LIMIT 1)")
                         # Generate ID baru (auto increment)
                         elif column_name == 'id':
                             new_price_data.append(None)
@@ -440,7 +439,7 @@ def generate_duplicate_sql():
                             formatted_values.append(f"'{str(value)}'")
                     
                     sql_statement = f"""
--- Duplikasi pricing ke-{i}
+-- Duplikasi pricing ke-{i} (relid: {pricing[pricing_columns.index('relid')] if 'relid' in pricing_columns and pricing_columns.index('relid') < len(pricing) else 'N/A'})
 {insert_query.replace('%s', '{}').format(*formatted_values)};
 """
                     sql_statements.append(sql_statement)
@@ -451,6 +450,28 @@ def generate_duplicate_sql():
             
             # Tambahkan komentar akhir
             sql_statements.append(f"""
+-- =====================================================
+-- UPDATE RELASI YANG BENAR
+-- =====================================================
+
+-- Update gid di tblproducts untuk memastikan terhubung ke grup yang benar
+UPDATE tblproducts p 
+JOIN tblproductgroups pg ON pg.name = CONCAT(REPLACE(p.name, ' Speed UP 50%', ''), ' Speed UP 50%')
+SET p.gid = pg.id 
+WHERE p.name LIKE '%Speed UP 50%' AND p.gid = 0;
+
+-- Update relid di tblpricing untuk memastikan terhubung ke produk yang benar
+-- Gunakan pendekatan yang lebih sederhana
+UPDATE tblpricing pr 
+SET pr.relid = (
+    SELECT p.id 
+    FROM tblproducts p 
+    WHERE p.name LIKE '%Speed UP 50%' 
+    ORDER BY p.id DESC 
+    LIMIT 1
+)
+WHERE pr.relid = 0;
+
 -- =====================================================
 -- VERIFIKASI DUPLIKASI
 -- =====================================================
@@ -474,6 +495,18 @@ WHERE name LIKE '%Speed UP 50%';
 -- Cek total pricing setelah duplikasi
 SELECT COUNT(*) as total_pricing_after_duplication FROM tblpricing;
 
+-- Cek pricing dengan relid yang benar (tidak 0)
+SELECT COUNT(*) as pricing_with_valid_relid 
+FROM tblpricing p 
+JOIN tblproducts prod ON p.relid = prod.id 
+WHERE prod.name LIKE '%Speed UP 50%';
+
+-- Cek products dengan gid yang benar (tidak 0)
+SELECT COUNT(*) as products_with_valid_gid 
+FROM tblproducts p 
+JOIN tblproductgroups pg ON p.gid = pg.id 
+WHERE p.name LIKE '%Speed UP 50%';
+
 -- Tampilkan beberapa productgroups yang berhasil diduplikasi
 SELECT id, name 
 FROM tblproductgroups 
@@ -486,6 +519,14 @@ SELECT id, name, gid
 FROM tblproducts 
 WHERE name LIKE '%Speed UP 50%' 
 ORDER BY id DESC 
+LIMIT 10;
+
+-- Tampilkan beberapa pricing yang berhasil diduplikasi dengan relid yang benar
+SELECT p.id, p.relid, prod.name as product_name
+FROM tblpricing p 
+JOIN tblproducts prod ON p.relid = prod.id 
+WHERE prod.name LIKE '%Speed UP 50%' 
+ORDER BY p.id DESC 
 LIMIT 10;
 
 -- Tampilkan semua data untuk referensi
@@ -514,16 +555,15 @@ def main():
     print("=" * 60)
     
     # Generate backup SQL
-    backup_sql = generate_backup_sql()
+    backup_sql, timestamp = generate_backup_sql()
     
     # Generate duplikasi SQL
-    duplicate_sql = generate_duplicate_sql()
+    duplicate_sql = generate_duplicate_sql(timestamp)
     
     # Gabungkan semua SQL
     complete_sql = backup_sql + "\n" + duplicate_sql
     
     # Simpan ke file
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"duplicate_packages_complete_{timestamp}.sql"
     
     with open(filename, 'w', encoding='utf-8') as f:
